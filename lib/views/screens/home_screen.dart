@@ -1,12 +1,52 @@
-import 'dart:developer';
-import 'dart:math';
+import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../widgets/app_button.dart';
 
+
+class ChainReactionGame extends FlameGame {
+
+  @override
+  FutureOr<void> onLoad() {
+    print("onLoad");  
+    return super.onLoad();
+  }
+  @override
+  void onAttach() {
+    // TODO: implement onAttach
+    super.onAttach();
+  }
+
+  @override
+  void onDetach() {
+    // TODO: implement onDetach
+    super.onDetach();
+  }
+
+  @override
+  void onMount() {
+    // TODO: implement onMount
+    super.onMount();
+  }
+
+  @override
+  void onRemove() {
+    // TODO: implement onRemove
+    super.onRemove();
+  }
+  @override
+  void onGameResize(Vector2 size) {
+    // TODO: implement onGameResize
+    super.onGameResize(size);
+  }
+
+  @override
+  void update(double dt) {
+    // TODO: implement update
+    super.update(dt);
+  }
+}
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
@@ -46,12 +86,13 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    var noOfCellHorizontally = (width) ~/ 64;
-    var noOfCellVertically = (height) ~/ 64;
+    var noOfCellHorizontally = (width) ~/ 64;//c
+    var noOfCellVertically = (height) ~/ 64;//r
     print(
         "[M] $height $width ${noOfCellHorizontally * 64} ${noOfCellVertically * 64}");
     var horizontalGap = width - noOfCellHorizontally * 64;
     var verticalGap = height - noOfCellVertically * 64;
+    // print("[M] $board");
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -70,16 +111,7 @@ class _HomeScreenState extends State<HomeScreen>
                       column: index2,
                       child: filledWith["$index1$index2"],
                       onTap: (int row, int column) {
-                        setState(() {
-                          if (filledWith["$index1$index2"] != null) {
-                            filledWith["$index1$index2"] = CellBall(
-                                count: filledWith["$index1$index2"]!.count + 1,
-                                color: Colors.red);
-                          } else {
-                            filledWith["$index1$index2"] =
-                                const CellBall(count: 1, color: Colors.green);
-                          }
-                        });
+                        fillCell(row, column);
                       },
                     ),
                   ),
@@ -92,25 +124,30 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  List<List<int>> board = [];
-
-// Initialize the game board with 'rows' and 'columns'
-  void initializeBoard(int rows, int columns) {
-    board = List.generate(rows, (i) => List.generate(columns, (j) => 0));
+  void fillCell(int row, int column) {
+    setState(() {
+      if (filledWith["$row$column"] != null) {
+        filledWith["$row$column"] = CellBall(
+          count: filledWith["$row$column"]!.count + 1,
+          color: _getBallColor(filledWith["$row$column"]?.occupiedBy),
+          occupiedBy: playerIndex,
+        );
+      } else {
+        filledWith["$row$column"] = CellBall(
+          count: 1,
+          color: _getBallColor(filledWith["$row$column"]?.occupiedBy),
+          occupiedBy: playerIndex,
+        );
+      }
+    });
   }
 
-// Access a specific cell on the board
-  int getCellValue(int row, int col) {
-    if (row < 0 || row >= board.length || col < 0 || col >= board[0].length) {
-      return -1; // Invalid cell
-    }
-    return board[row][col];
-  }
+  collideCells() {}
 
-// Update a cell's value
-  void setCellValue(int row, int col, int value) {
-    if (row >= 0 && row < board.length && col >= 0 && col < board[0].length) {
-      board[row][col] = value;
+  Color _getBallColor(int? index) {
+    if (index == 0) {
+      return Colors.green;
     }
+    return Colors.red;
   }
 }
