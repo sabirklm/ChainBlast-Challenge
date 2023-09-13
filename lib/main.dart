@@ -1,4 +1,5 @@
 import 'package:collision_game/views/screens/home_screen.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: darkColorScheme,
       ),
-      home: const HomeScreen(),
+      home:const HomeScreen(),
     );
   }
 }

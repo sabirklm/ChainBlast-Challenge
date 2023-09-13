@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class Cell extends StatelessWidget {
   final void Function(int row, int column) onTap;
@@ -38,10 +39,12 @@ class Cell extends StatelessWidget {
 class CellBall extends StatelessWidget {
   final Color color;
   final int count;
+  final int occupiedBy;
   const CellBall({
     super.key,
     required this.count,
     required this.color,
+    required this.occupiedBy,
   });
 
   @override
@@ -141,7 +144,7 @@ class TrippleBall extends StatelessWidget {
           ),
         ),
       ],
-    );
+    ).animate(autoPlay: true).shake(duration: Duration(days: 1));
   }
 }
 
